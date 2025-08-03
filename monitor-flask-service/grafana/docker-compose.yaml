@@ -1,0 +1,39 @@
+version: '3'
+services:
+ grafana:
+  image: grafana/grafana:latest
+  container_name: grafana
+  restart: always
+  ports:
+   - "3001:3000"
+  volumes:
+   - /etc/localtime:/etc/localtime:ro
+   - /etc/timezone:/etc/timezone:ro
+   - /data/docker-compose/grafana:/var/lib/grafana
+   - /data/docker-compose/grafana/grafana.ini:/etc/grafana/grafana.ini
+  environment:
+   - GF_RENDERING_SERVER_URL=http://renderer:8081/render
+   - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
+   - GF_RENDERING_VIEWPORT_MAX_HEIGHT=16000
+   - GF_RENDERING_CLIP_HEIGHT=16000
+   - GF_RENDERING_ARGS=--no-sandbox --disable-dev-shm-usage --hide-scrollbars
+   - GF_RENDERING_TIMEOUT=120
+
+ renderer:
+  image: grafana/grafana-image-renderer:latest
+  container_name: grafana-image-renderer
+  restart: always
+  ports:
+   - 8081
+  volumes:
+   - /etc/localtime:/etc/localtime:ro
+   - /etc/timezone:/etc/timezone:ro
+   - /data/docker-compose/grafana/grafana-image-renderer/config.json:/usr/src/app/config.json
+  environment:
+   - GF_RENDERER_PLUGIN_TZ=Asia/Shanghai
+   - GF_RENDERER_PLUGIN_IGNORE_HTTPS_ERRORS=true
+   - GF_RENDERER_PLUGIN_TIMEOUT=120
+   - GF_RENDERER_PLUGIN_MAX_WIDTH=16000
+   - GF_RENDERER_PLUGIN_MAX_HEIGHT=16000
+   - GF_RENDERER_PLUGIN_CLIP_HEIGHT=16000
+   - GF_RENDERER_PLUGIN_ARGS=--no-sandbox --disable-dev-shm-usage --hide-scrollbars

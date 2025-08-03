@@ -1,0 +1,12 @@
+license*.json
+*.pyc
+.vendor
+.bundle
+Converging
+TODO
+.idea/
+.DS_Store
+.env
+venv/
+data/
+logs/
